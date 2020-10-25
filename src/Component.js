@@ -1,23 +1,25 @@
-import React, {useEffect, useRef} from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 OnShow.propTypes = {
     handler: PropTypes.func.isRequired,
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
-        PropTypes.node
-    ]).isRequired
+        PropTypes.node,
+    ]).isRequired,
 }
 
 export class OnShowHandlerIsNotFound extends Error {
-    constructor(message='Handler function for onShow event is not defined.') {
+    constructor(message = 'Handler function for onShow event is not defined.') {
         super(message)
         this.name = OnShowHandlerIsNotFound.name
     }
 }
 
 export function OnShow(props) {
-    const onShowFunc = onShow ? onShow : () => throw new OnShowHandlerIsNotFound()
+    const onShowFunc = onShow
+        ? onShow
+        : () => throw new OnShowHandlerIsNotFound()
     const ref = useRef(null)
     useEffect(() => {
         onShowFunc(ref.current, props.handler)
@@ -25,9 +27,5 @@ export function OnShow(props) {
             window.removeEventListener('onScroll', props.handler)
         }
     }, [])
-    return (
-        <div ref={ref}>
-            {props.children}
-        </div>
-    )
+    return <div ref={ref}>{props.children}</div>
 }
