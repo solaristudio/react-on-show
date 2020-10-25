@@ -3,7 +3,8 @@ const babel = require('gulp-babel')
 const del = require('del')
 const prettier = require('gulp-prettier')
 const concat = require('gulp-concat')
-const install =require('gulp-install')
+const install = require('gulp-install')
+const jest = require('gulp-jest').default
 
 function installDeps() {
     return src('./package.json').pipe(install())
@@ -16,6 +17,10 @@ function clear(cb) {
 
 function prettify() {
     return src('src/*.js').pipe(prettier()).pipe(dest('src'))
+}
+
+function test() {
+    return src('tests').pipe(jest())
 }
 
 function bundle() {
@@ -36,9 +41,5 @@ function removeSourceFile(cb) {
     cb()
 }
 
-function finish(cb) {
-    console.log('Build is finished.')
-    cb()
-}
-
-exports.default = series(installDeps, clear, prettify, bundle, build, removeSourceFile, finish)
+exports.default = series(installDeps, clear, prettify, test, bundle, build, removeSourceFile)
+exports.buildWithoutTesting = series(installDeps, clear, prettify, bundle, build, removeSourceFile)

@@ -16,23 +16,30 @@ export class WrongTypeError extends Error {
  * @param func {Function} A function to be fired when the element is shown on the viewport
  * @param __testSuite__ {{_w: number, _y: number}} A unique object for unit testing
  */
-export function onShow(element, func, __testSuite__=undefined) {
+export function onShow(element, func, __testSuite__ = undefined) {
     if (!(element instanceof HTMLElement)) {
-        return () => throw new WrongTypeError('element must be type of HTMLElement.')
+        return () =>
+            throw new WrongTypeError('element must be type of HTMLElement.')
     }
     if (!(func instanceof Function)) {
         return () => throw new WrongTypeError('func must be type of Function.')
     }
     if (!(__testSuite__ instanceof Object) && __testSuite__ !== undefined) {
-        return () => throw new WrongTypeError('__testSuite__ must be either type of object or undefined.')
+        return () =>
+            throw new WrongTypeError(
+                '__testSuite__ must be either type of object or undefined.'
+            )
     }
     let f
     window.addEventListener(
         'scroll',
         (f = () => {
-            const windowHeightValue = __testSuite__ ? __testSuite__._w : window.innerHeight
-            const selectedComponentRelativeTopValue = __testSuite__ ? __testSuite__._y : element.getBoundingClientRect()
-                .y
+            const windowHeightValue = __testSuite__
+                ? __testSuite__._w
+                : window.innerHeight
+            const selectedComponentRelativeTopValue = __testSuite__
+                ? __testSuite__._y
+                : element.getBoundingClientRect().y
             if (windowHeightValue >= selectedComponentRelativeTopValue) {
                 func()
                 window.removeEventListener('scroll', f)
