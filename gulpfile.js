@@ -3,6 +3,11 @@ const babel = require('gulp-babel')
 const del = require('del')
 const prettier = require('gulp-prettier')
 const concat = require('gulp-concat')
+const install =require('gulp-install')
+
+function installDeps() {
+    return src('./package.json').pipe(install())
+}
 
 function clear(cb) {
     del('dist/**/*.js')
@@ -36,4 +41,4 @@ function finish(cb) {
     cb()
 }
 
-exports.default = series(clear, prettify, bundle, build, removeSourceFile, finish)
+exports.default = series(installDeps, clear, prettify, bundle, build, removeSourceFile, finish)
