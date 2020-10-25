@@ -1,0 +1,41 @@
+{
+  "name": "react-on-show",
+  "version": "1.0.0",
+  "description": "A react library for triggering events when components are shown",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest --verbose",
+    "build": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solaristudio/react-on-show.git"
+  },
+  "keywords": [
+    "react",
+    "onShow",
+    "event"
+  ],
+  "author": "SolariStudio",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/solaristudio/react-on-show/issues"
+  },
+  "homepage": "https://github.com/solaristudio/react-on-show#readme",
+  "dependencies": {
+    "react": "^17.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "@babel/preset-react": "^7.12.1",
+    "@types/jest": "^26.0.15",
+    "del": "^6.0.0",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-cli": "^2.3.0",
+    "gulp-prettier": "^3.0.0",
+    "jest": "^26.6.1",
+    "prettier": "^2.1.2"
+  }
+}
