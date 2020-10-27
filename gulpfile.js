@@ -4,6 +4,7 @@ const del = require('del')
 const prettier = require('gulp-prettier')
 const concat = require('gulp-concat')
 const install = require('gulp-install')
+const rename = require('gulp-rename')
 const jest = require('gulp-jest').default
 const fs = require('fs-extra')
 
@@ -34,7 +35,7 @@ function bundle() {
 }
 
 function build() {
-    return src('src/on-shown.js').pipe(babel()).pipe(dest('dist'))
+    return src('src/on-shown.js').pipe(babel()).pipe(rename('index.js')).pipe(dest('dist'))
 }
 
 function removeSourceFile(cb) {
@@ -47,7 +48,7 @@ function removeBuild(cb) {
     cb()
 }
 
-function moveSvelteAppBuildToRootDir(cb) {
+function moveReactAppBuildToRootDir(cb) {
     fs.moveSync('page/build', 'build', err => {
         if (err) return console.error(err)
         console.log('Build file is successfully moved to the root directory.')
@@ -57,4 +58,4 @@ function moveSvelteAppBuildToRootDir(cb) {
 
 exports.default = series(installDeps, clear, prettify, test, bundle, build, removeSourceFile)
 exports.buildWithoutTesting = series(installDeps, clear, prettify, bundle, build, removeSourceFile)
-exports.moveBuild = series(removeBuild, moveSvelteAppBuildToRootDir)
+exports.moveBuild = series(removeBuild, moveReactAppBuildToRootDir)
