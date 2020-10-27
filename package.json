@@ -7,7 +7,7 @@
     "test": "jest --verbose",
     "build": "gulp",
     "build:pure": "gulp buildWithoutTesting",
-    "deploy": "gh-pages -d page/build"
+    "deploy": "gh-pages -d build"
   },
   "repository": {
     "type": "git",
