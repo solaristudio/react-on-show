@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --verbose",
     "build": "gulp",
-    "build:pure": "gulp buildWithoutTesting"
+    "build:pure": "gulp buildWithoutTesting",
+    "deploy": "gulp moveBuild && gh-pages -d build"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,8 @@
     "@babel/preset-react": "^7.12.1",
     "@types/jest": "^26.0.15",
     "del": "^6.0.0",
+    "fs-extra": "^9.0.1",
+    "gh-pages": "^3.1.0",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-cli": "^2.3.0",
