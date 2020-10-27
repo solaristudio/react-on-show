@@ -1,5 +1,5 @@
 {
-  "name": "react-on-show",
+  "name": "@solariss/react-on-show",
   "version": "1.0.0",
   "description": "A react library for triggering events when components are shown",
   "main": "dist/index.js",
@@ -26,6 +26,9 @@
   "homepage": "https://github.com/solaristudio/react-on-show#readme",
   "dependencies": {
     "react": "^17.0.1"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
