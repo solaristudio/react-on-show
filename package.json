@@ -1,13 +1,13 @@
 {
   "name": "@solariss/react-on-show",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A react library for triggering events when components are shown",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest --verbose",
     "build": "gulp",
     "build:pure": "gulp buildWithoutTesting",
-    "deploy": "gulp moveBuild && gh-pages -d build"
+    "deploy": "gh-pages -d page/build"
   },
   "repository": {
     "type": "git",
@@ -23,9 +23,9 @@
   "bugs": {
     "url": "https://github.com/solaristudio/react-on-show/issues"
   },
-  "homepage": "https://github.com/solaristudio/react-on-show#readme",
-  "dependencies": {
-    "react": "^17.0.1"
+  "homepage": "https://github.com/solaristudio/react-on-show",
+  "peerDependencies": {
+    "react": "^15.0.1"
   },
   "publishConfig": {
     "access": "public"
@@ -36,11 +36,11 @@
     "@babel/preset-env": "^7.12.1",
     "@babel/preset-react": "^7.12.1",
     "@types/jest": "^26.0.15",
+    "babel-loader": "^8.1.0",
     "del": "^6.0.0",
     "fs-extra": "^9.0.1",
     "gh-pages": "^3.1.0",
     "gulp": "^4.0.2",
-    "gulp-babel": "^8.0.0",
     "gulp-cli": "^2.3.0",
     "gulp-concat": "^2.6.1",
     "gulp-install": "^1.1.0",
@@ -50,6 +50,10 @@
     "jest": "24.9.0",
     "jest-cli": "24.9.0",
     "prettier": "^2.1.2",
-    "prop-types": "^15.7.2"
+    "prop-types": "^15.7.2",
+    "react": "^15.0.1",
+    "webpack": "^5.2.0",
+    "webpack-cli": "^4.1.0",
+    "webpack-stream": "^6.1.0"
   }
 }

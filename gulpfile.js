@@ -1,6 +1,6 @@
 const { src, dest, series } = require('gulp')
-const babel = require('gulp-babel')
 const del = require('del')
+const webpack = require('webpack-stream')
 const prettier = require('gulp-prettier')
 const concat = require('gulp-concat')
 const install = require('gulp-install')
@@ -34,8 +34,8 @@ function bundle() {
     })).pipe(dest('src'))
 }
 
-function build() {
-    return src('src/on-shown.js').pipe(babel()).pipe(rename('index.js')).pipe(dest('dist'))
+function buildWithWebpack() {
+    return src('src/on-shown.js').pipe(webpack(require('./webpack.config.js'))).pipe(dest('dist'))
 }
 
 function removeSourceFile(cb) {
@@ -48,14 +48,5 @@ function removeBuild(cb) {
     cb()
 }
 
-function moveReactAppBuildToRootDir(cb) {
-    fs.moveSync('page/build', 'build', err => {
-        if (err) return console.error(err)
-        console.log('Build file is successfully moved to the root directory.')
-    })
-    cb()
-}
-
-exports.default = series(installDeps, clear, prettify, test, bundle, build, removeSourceFile)
-exports.buildWithoutTesting = series(installDeps, clear, prettify, bundle, build, removeSourceFile)
-exports.moveBuild = series(removeBuild, moveReactAppBuildToRootDir)
+exports.default = series(installDeps, clear, prettify, test, bundle, buildWithWebpack, removeSourceFile)
+exports.buildWithoutTesting = series(installDeps, clear, prettify, bundle, buildWithWebpack, removeSourceFile)
