@@ -23,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/solaristudio/react-on-show/issues"
   },
-  "homepage": "http://solaristudio.github.io/react-on-show",
+  "homepage": "https://solaristudio.github.io/react-on-show",
   "peerDependencies": {
     "react": "^15.0.1"
   },
