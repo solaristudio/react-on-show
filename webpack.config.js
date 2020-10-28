@@ -1,7 +1,6 @@
 const path = require('path')
 
 module.exports = {
-    entry: './src/on-shown.js',
     output: {
         path: path.join(__dirname, './dist'),
         filename: 'index.js',
@@ -19,7 +18,7 @@ module.exports = {
         ],
     },
     optimization: {
-        minimize: false,
+        minimize: true
     },
     resolve: {
         alias: {
