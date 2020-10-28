@@ -11,3 +11,4 @@ babel.config.json
 gulpfile.js
 package-lock.json
 webpack.config.js
+types.md

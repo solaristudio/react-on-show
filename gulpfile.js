@@ -4,9 +4,8 @@ const webpack = require('webpack-stream')
 const prettier = require('gulp-prettier')
 const concat = require('gulp-concat')
 const install = require('gulp-install')
-const rename = require('gulp-rename')
 const jest = require('gulp-jest').default
-const fs = require('fs-extra')
+const run = command => require('gulp-run')(command, {})
 
 function installDeps() {
     return src('./package.json').pipe(install())
@@ -43,10 +42,9 @@ function removeSourceFile(cb) {
     cb()
 }
 
-function removeBuild(cb) {
-    del.sync('build')
-    cb()
+function addStructureMarkDown() {
+    return run('npm run jsdoc').exec()
 }
 
-exports.default = series(installDeps, clear, prettify, test, bundle, buildWithWebpack, removeSourceFile)
-exports.buildWithoutTesting = series(installDeps, clear, prettify, bundle, buildWithWebpack, removeSourceFile)
+exports.default = series(installDeps, clear, prettify, test, bundle, buildWithWebpack, removeSourceFile, addStructureMarkDown)
+exports.buildWithoutTesting = series(installDeps, clear, prettify, bundle, buildWithWebpack, removeSourceFile, addStructureMarkDown)

@@ -9,6 +9,11 @@ OnShow.propTypes = {
     ]).isRequired,
 }
 
+/**
+ * @class
+ * Represents OnShowHandlerIsNotFound.
+ * Intended to be invoked when the core event handler is not found
+ */
 export class OnShowHandlerIsNotFound extends Error {
     constructor(message = 'Handler function for onShow event is not defined.') {
         super(message)
@@ -16,16 +21,23 @@ export class OnShowHandlerIsNotFound extends Error {
     }
 }
 
-export function OnShow(props) {
+/**
+ * Creates an OnShow React component.
+ * @param handler {Function} A function to be invoked when the onShow event is triggered
+ * @param children The content that is sent inside the component
+ * @return {JSX.Element}
+ * @constructor
+ */
+export function OnShow({ handler, children }) {
     const onShowFunc = onShow
         ? onShow
         : () => throw new OnShowHandlerIsNotFound()
     const ref = useRef(null)
     useEffect(() => {
-        onShowFunc(ref.current, props.handler)
+        onShowFunc(ref.current, handler)
         return () => {
-            window.removeEventListener('onScroll', props.handler)
+            window.removeEventListener('onScroll', handler)
         }
     }, [])
-    return <div ref={ref}>{props.children}</div>
+    return <div ref={ref}>{children}</div>
 }
