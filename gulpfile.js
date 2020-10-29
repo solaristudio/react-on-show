@@ -3,6 +3,7 @@ const del = require('del')
 const webpack = require('webpack-stream')
 const prettier = require('gulp-prettier')
 const install = require('gulp-install')
+const rename = require('gulp-rename')
 const jest = require('gulp-jest').default
 const run = command => require('gulp-run')(command, {})
 const fsExtra = require('fs-extra')
@@ -34,7 +35,7 @@ function moveDeclarationFile(cb) {
 }
 
 function buildWithWebpack() {
-    return src('release/react-on-show.js').pipe(webpack(require('./webpack.config.js'))).pipe(dest('dist'))
+    return src('src/react-on-show.tsx').pipe(webpack(require('./webpack.config.js'))).pipe(dest('dist'))
 }
 
 function removeReleaseFolder(cb) {
@@ -42,5 +43,10 @@ function removeReleaseFolder(cb) {
     cb()
 }
 
-exports.default = series(installDeps, clear, prettify, test, series(compileTypeScript, moveDeclarationFile, buildWithWebpack, removeReleaseFolder))
-exports.buildWithoutTesting = series(installDeps, clear, prettify, series(compileTypeScript, moveDeclarationFile, buildWithWebpack, removeReleaseFolder))
+function changeDeclarationFilename() {
+    return src('dist/react-on-show.d.ts').pipe(rename('index.d.ts')).pipe(dest('dist'))
+}
+
+exports.default = series(clear, prettify, test, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack)
+exports.buildWithoutTesting = series(installDeps, clear, prettify, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack)
+exports.defaultWithDeps = series(installDeps, clear, prettify, test, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack)

@@ -1,4 +1,5 @@
 const path = require('path')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
     output: {
@@ -12,13 +13,19 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.tsx?$/,
                 use: 'babel-loader'
             }
         ],
     },
     optimization: {
-        minimize: true
+        minimize: true,
+        minimizer: [new UglifyJsPlugin({
+            sourceMap: true,
+            uglifyOptions: {
+                compress: false
+            }
+        })]
     },
     resolve: {
         alias: {
@@ -26,7 +33,6 @@ module.exports = {
         }
     },
     externals: {
-        // Don't bundle react or react-dom
         react: {
             commonjs: "react",
             commonjs2: "react",
