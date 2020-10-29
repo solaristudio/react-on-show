@@ -3,7 +3,6 @@ const del = require('del')
 const webpack = require('webpack-stream')
 const prettier = require('gulp-prettier')
 const install = require('gulp-install')
-const rename = require('gulp-rename')
 const jest = require('gulp-jest').default
 const run = command => require('gulp-run')(command, {})
 const fsExtra = require('fs-extra')
