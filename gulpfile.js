@@ -43,10 +43,6 @@ function removeReleaseFolder(cb) {
     cb()
 }
 
-function changeDeclarationFilename() {
-    return src('dist/react-on-show.d.ts').pipe(rename('index.d.ts')).pipe(dest('dist'))
-}
-
 exports.default = series(clear, prettify, test, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack)
 exports.buildWithoutTesting = series(installDeps, clear, prettify, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack)
 exports.defaultWithDeps = series(installDeps, clear, prettify, test, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack)
