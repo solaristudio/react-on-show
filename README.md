@@ -1,6 +1,6 @@
 <img src="header.svg" />
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![npm version](https://badge.fury.io/js/%40berakocc%2Fsaber.svg)](https://badge.fury.io/js/%40solariss%2Freact-on-show) ![Test](https://github.com/solaristudio/react-on-show/workflows/test/badge.svg?branch=main&event=push) ![Build](https://github.com/solaristudio/react-on-show/workflows/build/badge.svg?branch=main&event=push)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![npm version](https://badge.fury.io/js/%40solariss%2Freact-on-show.svg)](https://badge.fury.io/js/%40solariss%2Freact-on-show) ![Test](https://github.com/solaristudio/react-on-show/workflows/test/badge.svg?branch=main&event=push) ![Build](https://github.com/solaristudio/react-on-show/workflows/build/badge.svg?branch=main&event=push)
 
 >`A library for adding event handler when an element is shown in React`
 
