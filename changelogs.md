@@ -2,6 +2,6 @@
 - Core build
 - Implemented `onShow` and `OnShow`
 
-## `1.0.2`
+## `1.0.3`
 - Added TypeScript support
 - Reconfigured gulpfile

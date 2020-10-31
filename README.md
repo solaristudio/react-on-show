@@ -12,11 +12,11 @@ npm install @solariss/react-on-show
 ## `Usage`
 There are two main way to use the library. You can use it either a function or a [Component](https://reactjs.org/docs/react-component.html).
 ```js
-// Function based
 import React from 'react'
 import { onShow, OnShow } from '@solariss/react-on-show'
-// Other imports
+// Other imports ...
 
+// Function based
 class MyComponent extends React.Component {
     component() {
         this.ref = React.createRef(null)
@@ -47,7 +47,7 @@ class MyComponent extends React.Component {
 ```
 
 ## `Documentation`
-A [GitHub Page](https://solaristudio.github.io/react-on-show) is dedicated for the project that contains a comprehensive and clear documentation.
+A [GitHub Page](https://solaristudio.github.io/react-on-show) is dedicated for the project that contains a comprehensive and clear documentation. You can also read [Changelogs](https://github.com/solaristudio/react-on-show/blob/main/changelogs.md) for detailed version updated.
 
 ## `Contributing`
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Also you can help me to improve the library by adding new [issues](https://github.com/solaristudio/react-on-show/issues).
