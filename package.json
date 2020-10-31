@@ -1,6 +1,6 @@
 {
   "name": "@solariss/react-on-show",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A react library for triggering events when components are shown",
   "main": "dist/index.js",
   "scripts": {
