@@ -18,10 +18,11 @@ module.exports = {
             }
         ],
     },
+    mode: 'production',
     optimization: {
         minimize: true,
+        usedExports: true,
         minimizer: [new UglifyJsPlugin({
-            sourceMap: true,
             uglifyOptions: {
                 compress: false
             }
@@ -39,6 +40,5 @@ module.exports = {
             amd: "React",
             root: "React"
         }
-    },
-    mode: "production"
+    }
 }
