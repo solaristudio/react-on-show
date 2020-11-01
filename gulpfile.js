@@ -3,7 +3,6 @@ const del = require('del')
 const webpack = require('webpack-stream')
 const prettier = require('gulp-prettier')
 const install = require('gulp-install')
-const jest = require('gulp-jest').default
 const run = command => require('gulp-run')(command, {})
 const fsExtra = require('fs-extra')
 
@@ -18,10 +17,6 @@ function clear(cb) {
 
 function prettify() {
     return src('src/*.js').pipe(prettier()).pipe(dest('src'))
-}
-
-function test() {
-    return src('tests').pipe(jest())
 }
 
 function compileTypeScript() {
@@ -42,6 +37,6 @@ function removeReleaseFolder(cb) {
     cb()
 }
 
-exports.default = series(clear, prettify, test, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack)
-exports.buildWithoutTesting = series(installDeps, clear, prettify, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack)
-exports.defaultWithDeps = series(installDeps, clear, prettify, test, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack)
+exports.default = series(clear, prettify, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack)
+exports.defaultWithDeps = series(installDeps, clear, prettify, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack)
+exports.compileTypeScript = compileTypeScript
