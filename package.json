@@ -1,12 +1,12 @@
 {
   "name": "@solariss/react-on-show",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "A react library for triggering events when components are shown",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest --verbose",
     "build": "gulp",
-    "build:deps": "gulp defaultWithDeps",
+    "build:withDeps": "gulp defaultWithDeps",
     "build:pure": "gulp buildWithoutTesting",
     "deploy": "gh-pages -d build"
   },
@@ -27,7 +27,8 @@
   },
   "homepage": "https://solaristudio.github.io/react-on-show",
   "peerDependencies": {
-    "react": "^15.0.1"
+    "react": "^15.0.1",
+    "prop-types": "^15.7.2"
   },
   "publishConfig": {
     "access": "public"
@@ -49,13 +50,15 @@
     "gulp-cli": "^2.3.0",
     "gulp-install": "^1.1.0",
     "gulp-jest": "^4.0.3",
+    "gulp-jsonminify": "^1.1.0",
     "gulp-prettier": "^3.0.0",
+    "gulp-rename": "^2.0.0",
     "gulp-run": "^1.7.1",
     "jest": "24.9.0",
     "jest-cli": "24.9.0",
     "prettier": "^2.1.2",
     "prop-types": "^15.7.2",
-    "react": "^15.0.1",
+    "react": "^15.7.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^5.2.0",
     "webpack-cli": "^4.1.0",

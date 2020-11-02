@@ -2,6 +2,7 @@ const path = require('path')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
+    entry: path.join(__dirname, './src/react-on-show.tsx'),
     output: {
         path: path.join(__dirname, './dist'),
         filename: 'index.js',
@@ -34,10 +35,16 @@ module.exports = {
     },
     externals: {
         react: {
-            commonjs: "react",
-            commonjs2: "react",
-            amd: "React",
-            root: "React"
+            root: 'React',
+            commonjs2: 'react',
+            commonjs: 'react',
+            amd: 'react'
+        },
+        'prop-types': {
+            root: 'PropTypes',
+            commonjs2: 'prop-types',
+            commonjs: 'prop-types',
+            amd: 'prop-types'
         }
     },
     mode: "production"

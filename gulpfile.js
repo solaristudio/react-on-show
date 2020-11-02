@@ -42,6 +42,11 @@ function removeReleaseFolder(cb) {
     cb()
 }
 
-exports.default = series(clear, prettify, test, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack)
+function getNPMPackageStatistics() {
+    return run('npm pack --dry-run').exec()
+}
+
+exports.default = series(clear, prettify, test, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack, getNPMPackageStatistics)
 exports.buildWithoutTesting = series(installDeps, clear, prettify, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack)
 exports.defaultWithDeps = series(installDeps, clear, prettify, test, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack)
+exports.compileTypeScript = compileTypeScript
