@@ -37,6 +37,11 @@ function removeReleaseFolder(cb) {
     cb()
 }
 
-exports.default = series(clear, prettify, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack)
+function getBundleInfo() {
+    return run('npm pack --dry-run').exec()
+}
+
+exports.default = series(clear, prettify, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack, getBundleInfo)
 exports.defaultWithDeps = series(installDeps, clear, prettify, compileTypeScript, moveDeclarationFile, removeReleaseFolder, buildWithWebpack)
+exports.bundleInfo = getBundleInfo
 exports.compileTypeScript = compileTypeScript

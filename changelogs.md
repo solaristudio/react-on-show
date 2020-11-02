@@ -13,3 +13,10 @@
 - test CI has been removed too.
 - Currently this default version is on `main` branch.
 - For the minimal version `minimal` branch has been created.
+
+## `2.1.0`
+- Optimised previous `onShow` function and restructured the main detection algorithm.
+- Decreased bundle size drastically using new concise and smart detection algorithm. It is now below 10KB.
+- `mergeOnShowOptions` function is removed from the library.
+- `getBundleInfo` task added for the `gulpfile.js`.
+- `release` folder added to the `.npmignore`.

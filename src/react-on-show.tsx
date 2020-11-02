@@ -1,20 +1,23 @@
 import throttle from 'lodash/throttle'
 
+type Nullable<T> = T | null
 type ErrorFunction = () => never
-
-enum Direction {
-    UP,
-    DOWN,
-}
-
 type ConditionFunction = (graphics: Graphics) => boolean
-
 type Conditions = [
     ConditionFunction,
     ConditionFunction,
     ConditionFunction,
     ConditionFunction
 ]
+type Graphics = {
+    windowHeightValue: number
+    selectedComponentClientRect: DOMRect
+}
+
+enum Direction {
+    UP,
+    DOWN,
+}
 
 interface OnShowOptions {
     [index: string]: number | boolean | Function | Conditions | undefined
@@ -23,59 +26,9 @@ interface OnShowOptions {
     conditionSet?: Conditions
 }
 
-const defaultOnShowOptions: OnShowOptions = {
-    once: true,
-    throttleInterval: 100,
-    conditionSet: [
-        function (graphics: Graphics) {
-            return (
-                graphics.windowHeightValue >=
-                graphics.selectedComponentClientRect.y
-            )
-        },
-        function (graphics: Graphics) {
-            return (
-                graphics.selectedComponentClientRect.y <=
-                -graphics.selectedComponentClientRect.height
-            )
-        },
-        function (graphics: Graphics) {
-            return (
-                graphics.selectedComponentClientRect.y >=
-                -graphics.selectedComponentClientRect.height
-            )
-        },
-        function (graphics: Graphics) {
-            return (
-                graphics.windowHeightValue <=
-                graphics.selectedComponentClientRect.y
-            )
-        },
-    ],
-}
-
-/**
- * Merges two OnShowOptions instances prioritising the instance given as an argument instead of the default one.
- * @param o1 {OnShowOptions}
- * @param o2 {OnShowOptions}
- */
-const mergeOptions = (o1: OnShowOptions, o2: OnShowOptions): OnShowOptions => {
-    const keys = ['once', 'throttleInterval', 'conditionSet']
-    const newInstance = {} as OnShowOptions
-    for (const key of keys) {
-        newInstance[key] = o1[key] === undefined ? o2[key] : o1[key]
-    }
-    return newInstance
-}
-
-type Graphics = {
-    windowHeightValue: number
-    selectedComponentClientRect: DOMRect
-}
-
 interface FunctionSet {
     enter: Function
-    leave?: Function
+    leave?: Nullable<Function>
 }
 
 /**
@@ -97,44 +50,66 @@ export function onShow(
 ): void | ErrorFunction {
     if (!functions.leave && options?.once === false)
         return (): never => {
-            throw new (class extends Error {
-                constructor() {
-                    super(
-                        'onShow function with [once=false] must contain exit in its functions argument.'
-                    )
-                }
-            })()
+            throw new Error('onShow function with [once=false] must contain exit in its functions argument.')
         }
     let f: (event?: Event) => void
-    const currentOptions: OnShowOptions = mergeOptions(
-        options || {},
-        defaultOnShowOptions
-    )
+    const keys = ['once', 'throttleInterval', 'conditionSet']
+    const defaultValues = [
+        true,
+        50,
+        [
+            function (graphics: Graphics) {
+                return (
+                    graphics.windowHeightValue >=
+                    graphics.selectedComponentClientRect.y
+                )
+            },
+            function (graphics: Graphics) {
+                return (
+                    graphics.selectedComponentClientRect.y <=
+                    -graphics.selectedComponentClientRect.height
+                )
+            },
+            function (graphics: Graphics) {
+                return (
+                    graphics.selectedComponentClientRect.y >=
+                    -graphics.selectedComponentClientRect.height
+                )
+            },
+            function (graphics: Graphics) {
+                return (
+                    graphics.windowHeightValue <=
+                    graphics.selectedComponentClientRect.y
+                )
+            },
+        ] as Conditions,
+    ]
+    if (options === undefined) options = {} as OnShowOptions
+    for (let i = 0; i < keys.length; ++i) {
+        options[keys[i]] = options[keys[i]] === undefined ? defaultValues[i] : options[keys[i]]
+    }
     let y0 = element.getBoundingClientRect().y
     const calculateDirection = (y: number): Direction => {
         const direction = y > y0 ? Direction.UP : Direction.DOWN
         y0 = y
         return direction
     }
-    let direction: Direction
-    const directionSets = [
-        [0, 1],
-        [2, 3],
-    ]
-    let lockIndex = -1
-    let isOutOfBoundary
-    let isInsideBoundary
-    let olderGraphics = {
+    const initialGraphics: Graphics = {
         windowHeightValue: window.innerHeight,
-        selectedComponentClientRect: element.getBoundingClientRect(),
+        selectedComponentClientRect: element.getBoundingClientRect()
     }
+    const isInside = (graphics: Graphics): boolean => {
+        return options!.conditionSet![0](graphics) && options!.conditionSet![2](graphics)
+    }
+    let isInsideOld = isInside(initialGraphics)
+    let direction: Direction
     window.addEventListener(
         'scroll',
         (f = throttle((): void | ErrorFunction => {
             const windowHeightValue = window.innerHeight
             const selectedComponentClientRect = element.getBoundingClientRect()
             direction = calculateDirection(selectedComponentClientRect!.y)
-            if (currentOptions.conditionSet === undefined)
+            if (options!.conditionSet === undefined)
                 return () => {
                     throw new Error('Conditions is undefined.')
                 }
@@ -142,79 +117,36 @@ export function onShow(
                 windowHeightValue,
                 selectedComponentClientRect,
             }
-            const [condF1, condF2, condF3, condF4] = currentOptions.conditionSet
-            const [cond1, cond2, cond3, cond4] = [
-                condF1(graphics),
-                condF2(graphics),
-                condF3(graphics),
-                condF4(graphics),
-            ]
-            const directionSet =
-                direction === Direction.DOWN
-                    ? directionSets[0]
-                    : directionSets[1]
-            isOutOfBoundary = [
-                condF2(graphics) && condF2(olderGraphics),
-                condF4(graphics) && condF4(olderGraphics),
-            ]
-            isInsideBoundary = [
-                condF1(graphics) && condF1(olderGraphics),
-                condF3(graphics) && condF3(olderGraphics),
-            ]
-            olderGraphics = graphics
-            const status = [
-                direction === Direction.DOWN &&
-                    cond1 &&
-                    !cond2 &&
-                    !(isInsideBoundary[0] && isInsideBoundary[1]),
-                direction === Direction.DOWN &&
-                    cond1 &&
-                    cond2 &&
-                    !isOutOfBoundary[0],
-                direction === Direction.UP &&
-                    cond3 &&
-                    !cond4 &&
-                    !(isInsideBoundary[0] && isInsideBoundary[1]),
-                direction === Direction.UP &&
-                    cond3 &&
-                    cond4 &&
-                    !isOutOfBoundary[1],
-            ]
-            const locks = [
-                status[0] && lockIndex !== 0,
-                status[1] && lockIndex !== 1,
-                status[2] && lockIndex !== 2,
-                status[3] && lockIndex !== 3,
-            ]
-            lockIndex = status[0]
-                ? 0
-                : status[1]
-                ? 1
-                : status[2]
-                ? 2
-                : status[3]
-                ? 3
-                : -1
+            let isInsideNew = isInside(graphics)
+            const [b0, b1, b2, b3] = (() => {
+                if ((!isInsideNew && !isInsideOld) || (isInsideNew && isInsideOld)) return [false, false, false, false]
+                else if (!isInsideNew && isInsideOld)
+                    return direction === Direction.DOWN ? [false, true, false, false] : [false, false, false, true]
+                else if (isInsideNew && !isInsideOld)
+                    return direction === Direction.DOWN ? [true, false, false, false] : [false, false, true, false]
+                return []
+            })()
+            isInsideOld = isInsideNew
             functions.leave = functions.leave ? functions.leave : () => {}
             if (
-                locks[directionSet[0]] &&
-                currentOptions.conditionSet[directionSet[0]]
+                b0 || b2
             ) {
                 functions.enter()
-                if (currentOptions.once) window.removeEventListener('scroll', f)
+                if (options!.once) window.removeEventListener('scroll', f)
             } else if (
-                locks[directionSet[1]] &&
-                currentOptions.conditionSet[directionSet[1]]
+                b1 || b3
             ) {
                 functions.leave()
             }
-        }, currentOptions.throttleInterval))
+        }, options.throttleInterval))
     )
     f()
 }
 
+type Props<T> = T | undefined
+
 import React, { useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
+import PropTypes, { InferProps } from 'prop-types'
 
 OnShow.propTypes = {
     handlers: PropTypes.shape({
@@ -230,32 +162,20 @@ OnShow.propTypes = {
     ]).isRequired,
 }
 
-interface Props {
-    handlers: FunctionSet
-    once?: boolean
-    throttleInterval?: number
-    conditionSet?: Conditions
-    children: JSX.Element | Array<JSX.Element>
-}
-
 /**
  * Creates an OnShow React component.
  * @return {JSX.Element}
  * @see onShow
  * @constructor
  */
-export function OnShow(props: Props): JSX.Element {
+export function OnShow(props: InferProps<typeof OnShow.propTypes>): JSX.Element {
     const ref = useRef(null)
     useEffect(() => {
         onShow(ref.current ?? document.body, props.handlers, {
-            once: props.once,
-            throttleInterval: props.throttleInterval,
-            conditionSet: props.conditionSet,
+            once: props.once as Props<boolean>,
+            throttleInterval: props.throttleInterval as Props<number>,
+            conditionSet: props.conditionSet as Props<Conditions>,
         })
     }, [])
-    return (
-        <div ref={ref}>
-            {props.children}
-        </div>
-    )
+    return <div ref={ref}>{props.children}</div>
 }

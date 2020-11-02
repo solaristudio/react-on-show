@@ -1,6 +1,6 @@
 {
   "name": "@solariss/react-on-show",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A react library for triggering events when components are shown",
   "main": "dist/index.js",
   "scripts": {
@@ -48,6 +48,7 @@
     "gulp-install": "^1.1.0",
     "gulp-prettier": "^3.0.0",
     "gulp-run": "^1.7.1",
+    "jsdoc-to-markdown": "^6.0.1",
     "lodash": "^4.17.20",
     "lodash.throttle": "^4.1.1",
     "prettier": "^2.1.2",
