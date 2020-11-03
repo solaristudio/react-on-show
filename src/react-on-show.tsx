@@ -6,8 +6,6 @@ type ConditionFunction = (graphics: Graphics) => boolean
 type Conditions = [
     ConditionFunction,
     ConditionFunction,
-    ConditionFunction,
-    ConditionFunction
 ]
 type Graphics = {
     windowHeightValue: number
@@ -66,20 +64,8 @@ export function onShow(
             },
             function (graphics: Graphics) {
                 return (
-                    graphics.selectedComponentClientRect.y <=
-                    -graphics.selectedComponentClientRect.height
-                )
-            },
-            function (graphics: Graphics) {
-                return (
                     graphics.selectedComponentClientRect.y >=
                     -graphics.selectedComponentClientRect.height
-                )
-            },
-            function (graphics: Graphics) {
-                return (
-                    graphics.windowHeightValue <=
-                    graphics.selectedComponentClientRect.y
                 )
             },
         ] as Conditions,
@@ -99,10 +85,11 @@ export function onShow(
         selectedComponentClientRect: element.getBoundingClientRect()
     }
     const isInside = (graphics: Graphics): boolean => {
-        return options!.conditionSet![0](graphics) && options!.conditionSet![2](graphics)
+        return options!.conditionSet![0](graphics) && options!.conditionSet![1](graphics)
     }
     let isInsideOld = isInside(initialGraphics)
     let direction: Direction
+    let isFirstInvocation = true
     window.addEventListener(
         'scroll',
         (f = throttle((): void | ErrorFunction => {
@@ -119,13 +106,15 @@ export function onShow(
             }
             let isInsideNew = isInside(graphics)
             const [b0, b1, b2, b3] = (() => {
-                if ((!isInsideNew && !isInsideOld) || (isInsideNew && isInsideOld)) return [false, false, false, false]
+                if (isInsideNew && isInsideOld && isFirstInvocation) return [true, false, false,false]
+                else if ((!isInsideNew && !isInsideOld) || (isInsideNew && isInsideOld)) return [false, false, false, false]
                 else if (!isInsideNew && isInsideOld)
                     return direction === Direction.DOWN ? [false, true, false, false] : [false, false, false, true]
                 else if (isInsideNew && !isInsideOld)
                     return direction === Direction.DOWN ? [true, false, false, false] : [false, false, true, false]
                 return []
             })()
+            isFirstInvocation = false
             isInsideOld = isInsideNew
             functions.leave = functions.leave ? functions.leave : () => {}
             if (

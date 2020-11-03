@@ -21,17 +21,11 @@ module.exports = {
     mode: 'production',
     optimization: {
         minimize: true,
-        usedExports: true,
         minimizer: [new UglifyJsPlugin({
             uglifyOptions: {
                 compress: false
             }
         })]
-    },
-    resolve: {
-        alias: {
-            'react': path.resolve(__dirname, './node_modules/react'),
-        }
     },
     externals: {
         react: {
@@ -39,6 +33,12 @@ module.exports = {
             commonjs2: "react",
             amd: "React",
             root: "React"
+        },
+        'prop-types': {
+            root: 'PropTypes',
+            commonjs2: 'prop-types',
+            commonjs: 'prop-types',
+            amd: 'prop-types'
         }
     }
 }

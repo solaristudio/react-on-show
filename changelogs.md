@@ -20,3 +20,7 @@
 - `mergeOnShowOptions` function is removed from the library.
 - `getBundleInfo` task added for the `gulpfile.js`.
 - `release` folder added to the `.npmignore`.
+
+### `2.1.1`
+- `conditionSet` now has only two functions: both for entering conditions from above and below.
+- Fixed a bug: When the target component initially on screen function doesn't trigger.
